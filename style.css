@@ -1,0 +1,101 @@
+/* Light Mode (Default) */
+[data-theme="light"]{
+    --background-color: #f4f4f9;
+    --text-color: #333;
+    --header-background: #f4f4f9;
+    --header-text-color: #333;
+    --link-color: #bb86fc;
+    --link-hover-color: #ffcc00;
+    --footer-background: #f4f4f9;
+    --footer-text-color: #333;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --header-background: #1e1e1e;
+    --header-text-color: #e0e0e0;
+    --link-color: #bb86fc;
+    --link-hover-color: #ffffff;
+    --footer-background: #1e1e1e;
+    --footer-text-color: #e0e0e0;
+}
+[data-theme="high contrast"]
+{
+    --background-color: #000;
+    --text-color: #fff;
+    --header-background: #000;
+    --header-text-color: #fff;
+    --link-color: #ffcc00;
+    --link-hover-color: #ffffff;
+    --footer-background: #000;
+    --footer-text-color: #fff;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    opacity: 1; /* Fallback */
+    transform: translateY(0); /* Fallback */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+body:not(.loaded) {
+    opacity: 0;
+    transform: translateY(10px);
+}
+header {
+    background-color: var(--header-background);
+    color: var(--header-text-color);
+}
+header nav a {
+    color: var(--link-color);
+}
+header nav a:hover {
+    color: var(--link-hover-color);
+}
+footer {
+    background-color: var(--footer-background);
+    color: var(--footer-text-color);
+}
+.gallery img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gallery img:active {
+    transform: scale(1.5);
+    z-index: 10;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.recordings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.responsive-video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
