@@ -1,5 +1,5 @@
 /* Light Mode (Default) */
-[data-theme="light"]{
+[data-theme="light"] {
     --background-color: #f4f4f9;
     --text-color: #333;
     --header-background: #f4f4f9;
@@ -21,8 +21,8 @@
     --footer-background: #1e1e1e;
     --footer-text-color: #e0e0e0;
 }
-[data-theme="high contrast"]
-{
+
+[data-theme="high contrast"] {
     --background-color: #000;
     --text-color: #fff;
     --header-background: #000;
@@ -53,20 +53,27 @@ body:not(.loaded) {
     opacity: 0;
     transform: translateY(10px);
 }
+
 header {
     background-color: var(--header-background);
     color: var(--header-text-color);
 }
+
 header nav a {
     color: var(--link-color);
+    text-shadow: 0 0 5px #bb86fc, 0 0 10px #bb86fc, 0 0 20px #ffcc00;
 }
+
 header nav a:hover {
     color: var(--link-hover-color);
+    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffffff;
 }
+
 footer {
     background-color: var(--footer-background);
     color: var(--footer-text-color);
 }
+
 .gallery img {
     width: 200px;
     height: auto;
@@ -85,6 +92,29 @@ footer {
     z-index: 10;
     position: relative;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+}
+
+.lightbox.active {
+    display: flex;
 }
 
 .recordings {
