@@ -129,3 +129,49 @@ footer {
     height: auto;
     border-radius: 8px;
 }
+.code-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.code-item {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.code-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.readme {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.buttons {
+    margin-top: 1rem;
+}
+
+.button {
+    display: inline-block;
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--link-color);
+    color: var(--background-color);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--link-hover-color);
+}
