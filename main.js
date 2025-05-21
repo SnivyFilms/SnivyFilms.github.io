@@ -1,6 +1,6 @@
-// Theme Toggle Logic
 document.addEventListener('DOMContentLoaded', () => {
-    const themeSelector = document.getElementById('theme-toggle'); // Match the id in HTML
+    // Theme Toggle Logic
+    const themeSelector = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('theme') || 'light';
 
     // Apply the saved theme
@@ -18,6 +18,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add 'loaded' class to body for page transition
     document.body.classList.add('loaded');
+
+    // Photography Gallery Filtering
+    const categoryFilter = document.getElementById('category-filter');
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', filterImages);
+
+        function filterImages() {
+            const category = categoryFilter.value;
+            const images = document.querySelectorAll('.gallery img');
+
+            images.forEach(img => {
+                const src = img.getAttribute('src');
+
+                if (category === 'all') {
+                    img.style.display = '';
+                } else if (category === 'trains' && src.includes('Images/Trains/')) {
+                    img.style.display = '';
+                } else if (category === 'nationalparks' && src.includes('Images/National Parks/')) {
+                    img.style.display = '';
+                } else if (category === 'other' && src.includes('Images/Other/')) {
+                    img.style.display = '';
+                } else {
+                    img.style.display = 'none';
+                }
+            });
+        }
+    }
 
     // Fetch README.md files for code projects
     const codeItems = document.querySelectorAll(".code-item");
