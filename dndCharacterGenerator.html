@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #character-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* center the form contents horizontally */
+            margin: 0 auto;      /* center the form itself on the page */
+            gap: 0.5rem;
+            max-width: 360px;
+        }
+
+        #character-form input,
+        #character-form select,
+        #character-form button {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* center labels so they align with centered inputs */
+        #character-form label {
+            width: 100%;
+            text-align: center;
+        }
+
+        #character-form button {
+            margin-top: 0.5rem;
+        }
+
+        #result {
+            max-width: 680px;
+            margin: 1.5rem auto 0;
+            text-align: left;
+        }
+
+        #result-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<script src="main.js" defer></script>
+<header>
+    <h1>Dungeons and Dragons Character Generator</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="code.html">Code</a>
+        <a href="photography.html">Photography</a>
+        <a href="recordings.html">Recordings</a>
+    </nav>
+</header>
+<main>
+    <section>
+        <h2>Build a Generic Character</h2>
+        <p>Set a few base details, then generate a random concept character for inspiration.</p>
+
+        <form id="character-form">
+            <label for="strength">Strength</label>
+            <input id="strength" name="strength" type="number" min="1" max="20" value="10" required>
+
+            <label for="dexterity">Dexterity</label>
+            <input id="dexterity" name="dexterity" type="number" min="1" max="20" value="10" required>
+
+            <label for="constitution">Constitution</label>
+            <input id="constitution" name="constitution" type="number" min="1" max="20" value="10" required>
+
+            <label for="intellect">Intellect</label>
+            <input id="intellect" name="intellect" type="number" min="1" max="20" value="10" required>
+
+            <label for="wisdom">Wisdom</label>
+            <input id="wisdom" name="wisdom" type="number" min="1" max="20" value="10" required>
+
+            <label for="charisma">Charisma</label>
+            <input id="charisma" name="charisma" type="number" min="1" max="20" value="10" required>
+
+            <label for="level">Level</label>
+            <input id="level" name="level" type="number" min="1" max="20" value="1" required>
+
+            <label for="armor-type">Type of Armor</label>
+            <select id="armor-type" name="armor-type">
+                <option value="Unarmored">Unarmored</option>
+                <option value="Light Armor">Light Armor</option>
+                <option value="Medium Armor">Medium Armor</option>
+                <option value="Heavy Armor">Heavy Armor</option>
+                <option value="Shielded">Shielded</option>
+            </select>
+
+            <button type="submit" class="button">Generate Character</button>
+        </form>
+    </section>
+
+    <section id="result" style="display: none; margin-top: 1.5rem;">
+        <h2>Your Random Character</h2>
+        <p><strong>Name:</strong> <span id="result-name"></span></p>
+        <p><strong>Class:</strong> <span id="result-class"></span></p>
+        <p><strong>Species:</strong> <span id="result-species"></span></p>
+        <p><strong>Background:</strong> <span id="result-background"></span></p>
+        <p><strong>Personality:</strong> <span id="result-personality"></span></p>
+        <p><strong>Level:</strong> <span id="result-level"></span></p>
+        <p><strong>Armor Type:</strong> <span id="result-armor"></span></p>
+        <p><strong>Stat Lean:</strong> <span id="result-stat"></span></p>
+        <p><strong>Leans:</strong> <span id="result-leans"></span></p>
+        <p><strong>Concept:</strong> <span id="result-summary"></span></p>
+        <div id="result-actions">
+            <button id="save-character" type="button" class="button">Save Character (.txt)</button>
+        </div>
+    </section>
+</main>
+
+<script>
+    const firstNames = ["Arin", "Bren", "Caelynn", "Doran", "Elara", "Fenn", "Garrik", "Helia", "Ivor", "Jora"];
+    const lastNames = ["Dawntracker", "Ashvale", "Stormrunner", "Ironbrook", "Moonwhisper", "Thistlefoot", "Ravencrest", "Brightwater", "Frostvale", "Emberfall"];
+    const classes = ["Fighter", "Rogue", "Wizard", "Cleric", "Ranger", "Bard", "Paladin", "Druid", "Monk", "Sorcerer"];
+    const species = ["Human", "Elf", "Dwarf", "Halfling", "Tiefling", "Gnome", "Half-Orc", "Dragonborn", "Half-Elf"];
+    const backgrounds = ["Wanderer", "Scholar", "Soldier", "Entertainer", "Acolyte", "Outlander", "Guild Artisan", "Charlatan"];
+    const personalities = [
+        "Quiet but intensely observant",
+        "Loud, friendly, and always ready for trouble",
+        "Calm under pressure and slow to anger",
+        "Suspicious of strangers but loyal to allies",
+        "Curious about every old ruin and mystery",
+        "Confident, dramatic, and impossible to ignore"
+    ];
+
+    function randomItem(list) {
+        return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function clampValue(value, min, max, fallback) {
+        const number = Number(value);
+        if (Number.isNaN(number)) return fallback;
+        return Math.max(min, Math.min(max, number));
+    }
+
+    function abilityLean(score) {
+        const mod = Math.floor((score - 10) / 2);
+        return mod >= 0 ? "+" + mod : String(mod);
+    }
+
+    function strongestStatLabel(stats) {
+        let best = stats[0];
+        for (let i = 1; i < stats.length; i += 1) {
+            if (stats[i].value > best.value) best = stats[i];
+        }
+        return best.label;
+    }
+
+    function buildCharacterText() {
+        const lines = [
+            "D&D Character Sheet (Generic)",
+            "----------------------------",
+            "Name: " + document.getElementById("result-name").textContent,
+            "Class: " + document.getElementById("result-class").textContent,
+            "Species: " + document.getElementById("result-species").textContent,
+            "Background: " + document.getElementById("result-background").textContent,
+            "Personality: " + document.getElementById("result-personality").textContent,
+            "Level: " + document.getElementById("result-level").textContent,
+            "Armor Type: " + document.getElementById("result-armor").textContent,
+            "Stat Lean: " + document.getElementById("result-stat").textContent,
+            "Leans: " + document.getElementById("result-leans").textContent,
+            "Concept: " + document.getElementById("result-summary").textContent,
+            "",
+            "Generated on: " + new Date().toLocaleString()
+        ];
+        return lines.join("\n");
+    }
+
+    function safeFilePart(value) {
+        return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    }
+
+    function hasGeneratedCharacter() {
+        return document.getElementById("result").style.display !== "none";
+    }
+
+    document.getElementById("character-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const str = clampValue(document.getElementById("strength").value, 1, 20, 10);
+        const dex = clampValue(document.getElementById("dexterity").value, 1, 20, 10);
+        const con = clampValue(document.getElementById("constitution").value, 1, 20, 10);
+        const intStat = clampValue(document.getElementById("intellect").value, 1, 20, 10);
+        const wis = clampValue(document.getElementById("wisdom").value, 1, 20, 10);
+        const cha = clampValue(document.getElementById("charisma").value, 1, 20, 10);
+        const level = clampValue(document.getElementById("level").value, 1, 20, 1);
+        const armorType = document.getElementById("armor-type").value;
+
+        const stats = [
+            { key: "STR", label: "Strength", value: str },
+            { key: "DEX", label: "Dexterity", value: dex },
+            { key: "CON", label: "Constitution", value: con },
+            { key: "INT", label: "Intellect", value: intStat },
+            { key: "WIS", label: "Wisdom", value: wis },
+            { key: "CHA", label: "Charisma", value: cha }
+        ];
+
+        const name = randomItem(firstNames) + " " + randomItem(lastNames);
+        const chosenClass = randomItem(classes);
+        const chosenSpecies = randomItem(species);
+        const chosenBackground = randomItem(backgrounds);
+        const chosenPersonality = randomItem(personalities);
+        const statLean = strongestStatLabel(stats);
+        const leanString = stats.map(function (stat) {
+            return stat.label + ": " + stat.value + " (" + abilityLean(stat.value) + ")";
+        }).join(" | ");
+
+        document.getElementById("result-name").textContent = name;
+        document.getElementById("result-class").textContent = chosenClass;
+        document.getElementById("result-species").textContent = chosenSpecies;
+        document.getElementById("result-background").textContent = chosenBackground;
+        document.getElementById("result-personality").textContent = chosenPersonality;
+        document.getElementById("result-level").textContent = String(level);
+        document.getElementById("result-armor").textContent = armorType;
+        document.getElementById("result-stat").textContent = statLean;
+        document.getElementById("result-leans").textContent = leanString;
+        document.getElementById("result-summary").textContent =
+            name + " is a level " + level + " " + chosenSpecies + " " + chosenClass.toLowerCase() +
+            " with " + armorType.toLowerCase() + ", a " + chosenBackground.toLowerCase() + " background, and a " +
+            chosenPersonality.toLowerCase() + ".";
+
+        document.getElementById("result").style.display = "block";
+    });
+
+    document.getElementById("save-character").addEventListener("click", function () {
+        if (!hasGeneratedCharacter()) return;
+
+        const content = buildCharacterText();
+        const name = document.getElementById("result-name").textContent || "character";
+        const fileName = safeFilePart(name) + ".txt";
+
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+    });
+</script>
+</body>
+</html>
