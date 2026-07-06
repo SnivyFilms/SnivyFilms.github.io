@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+        crossorigin=""
+    >
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+        crossorigin=""
+    >
+</head>
+<body class="traintracker-page">
+<script src="main.js" defer></script>
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+    defer
+></script>
+<script
+    src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"
+    crossorigin=""
+    defer
+></script>
+<script src="vendor/protobuf.min.js" defer></script>
+<script src="traintracker.js" defer></script>
+<header>
+    <h1>Live Train Tracker</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="code.html">Code</a>
+        <a href="photography.html">Photography</a>
+        <a href="recordings.html">Recordings</a>
+        <a href="traintracker.html">Train Tracker</a>
+    </nav>
+    <label for="theme-toggle">Select Theme:</label>
+    <select id="theme-toggle">
+        <option value="light">Light Mode</option>
+        <option value="dark">Dark Mode</option>
+        <option value="high contrast">High Contrast</option>
+    </select>
+</header>
+<main>
+    <section class="traintracker-intro">
+        <h2>Amtrak + commuter rail real-time map</h2>
+        <p>Locations refresh automatically. Click a train marker for details.</p>
+    </section>
+    <section class="traintracker-controls">
+        <div class="traintracker-toggle">
+            <label>
+                <input type="checkbox" id="toggle-amtrak" checked>
+                Amtrak
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-lirr" checked>
+                MTA LIRR
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-mnr" checked>
+                MTA Metro-North
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-mbta" checked>
+                MBTA Commuter Rail
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-septa" checked>
+                SEPTA Regional Rail
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-vre" checked>
+                VRE
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-brightline" checked>
+                Brightline
+            </label>
+            <label>
+                <input type="checkbox" id="toggle-trirail" checked>
+                Tri-Rail
+            </label>
+        </div>
+        <div class="traintracker-actions">
+            <button class="map-button" id="refresh-button" type="button">Refresh now</button>
+            <span id="last-updated">Last update: --</span>
+        </div>
+    </section>
+    <section class="traintracker-map">
+        <div id="map" aria-label="Live train map"></div>
+        <div class="traintracker-legend">
+            <span class="legend-item"><span class="legend-dot legend-amtrak"></span>Amtrak</span>
+            <span class="legend-item"><span class="legend-dot legend-lirr"></span>LIRR</span>
+            <span class="legend-item"><span class="legend-dot legend-mnr"></span>Metro-North</span>
+            <span class="legend-item"><span class="legend-dot legend-mbta"></span>MBTA Commuter Rail</span>
+            <span class="legend-item"><span class="legend-dot legend-septa"></span>SEPTA Regional Rail</span>
+            <span class="legend-item"><span class="legend-dot legend-vre"></span>VRE</span>
+            <span class="legend-item"><span class="legend-dot legend-brightline"></span>Brightline</span>
+            <span class="legend-item"><span class="legend-dot legend-trirail"></span>Tri-Rail</span>
+        </div>
+    </section>
+    <section class="traintracker-status">
+        <div id="status-message">Loading data sources...</div>
+        <div class="status-grid">
+            <div>Amtrak trains: <span id="amtrak-count">0</span></div>
+            <div>LIRR trains: <span id="lirr-count">0</span></div>
+            <div>Metro-North trains: <span id="mnr-count">0</span></div>
+            <div>MBTA trains: <span id="mbta-count">0</span></div>
+            <div>SEPTA trains: <span id="septa-count">0</span></div>
+            <div>VRE trains: <span id="vre-count">0</span></div>
+            <div>Brightline trains: <span id="brightline-count">0</span></div>
+            <div>Tri-Rail trains: <span id="trirail-count">0</span></div>
+        </div>
+        <p class="status-note">
+            Data sources: Amtrak train location map + MTA unified locations feed + MBTA V3 API + SEPTA TrainView + VRE GTFS-RT VehiclePosition feed + Brightline TrainStatus + Tri-Rail ETASpot. If data does not load, the provider may be blocking
+            browser requests.
+        </p>
+    </section>
+</main>
+</body>
+</html>
